@@ -4,6 +4,7 @@ gem 'rails', '3.2.8'
 gem 'sqlite3'
 gem 'jquery-rails'
 gem 'redcarpet'
+gem 'annotate', ">=2.5.0"
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
