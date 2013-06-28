@@ -1,5 +1,11 @@
 GlowingCyrilInterview::Application.routes.draw do
-  resources :trades, :only => [:index]
+  get "static_pages/home"
+
+  get "static_pages/help"
+
+  resources :trades
+  
+  match 'trades' => 'trades#index'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
