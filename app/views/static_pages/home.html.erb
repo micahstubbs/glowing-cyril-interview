@@ -1,2 +1,27 @@
-<h1>StaticPages#home</h1>
-<p>Find me in app/views/static_pages/home.html.erb</p>
+<% provide(:title, 'Home') %>
+<html>
+  <head>
+    <title>Glowing Cyril| <%= yield(:title) %></title>
+  </head>
+  <body>
+    <h1>Glowing Cyril</h1>
+    <p>
+      This is the home page for the
+      <a href="https://github.com/micahstubbs/glowing-cyril-interview">Glowing Cyril</a>
+      application.
+    </p>
+
+    <table>                         
+      <tr>                          
+        <th>field1</th>
+        <th>field2</th>
+      </tr>
+        <% @trade.each do |data| %>       
+          <tr>
+            <td><%= data.counterparty %></td> 
+            <td><%= data.trader %></td>  
+          </tr>
+        <% end %>                       
+    </table>  
+  </body>
+</html>

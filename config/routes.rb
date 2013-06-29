@@ -2,10 +2,14 @@ GlowingCyrilInterview::Application.routes.draw do
   get "static_pages/home"
 
   get "static_pages/help"
+  get "instructions_controller/index"
 
   resources :trades
-  
   match 'trades' => 'trades#index'
+
+  
+  
+  
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

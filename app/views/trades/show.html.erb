@@ -1,0 +1,14 @@
+<% provide(:title, 'Trades') %>
+<html>
+  <head>
+    <title>Glowing Cyril| <%= yield(:title) %></title>
+  </head>
+  <body>
+    <p>
+      This page shows trade <%= @trade.id %> 
+    </p>
+    <div>
+      <%= render 'shared/trade_table' %>
+    </div>
+  </body>
+</html>
