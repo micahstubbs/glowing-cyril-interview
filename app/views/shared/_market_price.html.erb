@@ -1,0 +1,8 @@
+<!-- for use with trades/index.html.erb -->
+
+<td>
+  <% price_record = Price.where('curve_id = ? AND month_id = ?', trade.curve_id, trade.month_id).all %>
+  <% price_record.each do |p| %>
+    <%= p.settle %>
+  <% end %>
+</td>

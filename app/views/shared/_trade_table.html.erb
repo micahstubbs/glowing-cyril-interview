@@ -18,12 +18,29 @@
   </tr>
   <tr>
     <td valign='top'><b>price</b></td>
-    <td><%= @trade.price %></td>
+    <td><%= @trade.book_price %></td>
   </tr>
   <tr>
     <td valign='top'><b>volume</b></td>
     <td><%= @trade.volume %></td>
   </tr>
+  <tr>
+    <td valign='top'><b>market_price</b></td>
+    <td>
+      <% market_price = 0 %>
+      <% @price.each do |p| %>
+        <% market_price = p.settle %>
+        <%= market_price %>
+      <% end %>
+    </td>
+  </tr>
+  <tr>
+    <td valign='top'><b>mark_to_market_value</b></td>
+    <td>
+      <% mtm_value = @trade.volume * (@trade.book_price - market_price) %>
+      <%= mtm_value %>
+    </td>
+  </tr>  
   <tr>
     <td valign='top'><b>tenor_start</b></td>
     <td><%= @trade.tenor_start %></td>

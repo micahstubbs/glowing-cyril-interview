@@ -1,5 +1,12 @@
 class Curve < ActiveRecord::Base
+
+  belongs_to :trade
+  belongs_to :price
+
   attr_accessible :commodity, :market
+
+
+
 
   def self.import(file)
     CSV.foreach(file.path, headers: true) do |row|

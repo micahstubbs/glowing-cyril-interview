@@ -1,4 +1,5 @@
 class MonthsController < ApplicationController
+
   # GET /months
   # GET /months.json
   def index

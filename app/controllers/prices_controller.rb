@@ -1,4 +1,9 @@
 class PricesController < ApplicationController
+
+
+  
+
+
   # GET /prices
   # GET /prices.json
   def index

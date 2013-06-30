@@ -1,6 +1,9 @@
 class Month < ActiveRecord::Base
   attr_accessible :month_string
 
+  belongs_to :trade
+  belongs_to :price
+
   require 'csv'  
 
   def self.import(file)

@@ -1,9 +1,8 @@
 class TradesController < ApplicationController
 
   around_filter :catch_not_found
-  
   #require 'controller_util'
-  #include ControllerUtil
+  
 
   def index
   	@trades = Trade.all
@@ -12,6 +11,7 @@ class TradesController < ApplicationController
   def show
   	@trade = Trade.find(params[:id])
   	@trades = Trade.all
+    @price = Price.where('curve_id = ? AND month_id = ?', @trade.curve_id, @trade.month_id).all
   end
 
   def import

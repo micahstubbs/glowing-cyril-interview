@@ -9,6 +9,8 @@
     <th>buy_sell</th>
     <th>price</th>
     <th>volume</th>
+    <th>market_price</th>
+    <th>mark_to_market_value</th>
     <th>tenor_start</th>
     <th>tenor_end</th>
     <th>delivery_location</th>
@@ -17,7 +19,7 @@
     <th>tags</th>
     <th>notes</th>
   </tr>
-    
+  <% mtm_total = 0 %>  
   <% @trades.each do |trade| %>       
     <tr>
       <td><%= link_to 'Show', trade %></td>
@@ -27,6 +29,20 @@
       <td><%= trade.buy_sell %></td>
       <td><%= trade.price %></td>
       <td><%= trade.volume %></td>
+      <td>
+        <% market_price = 0 %>
+        <% price_record = Price.where('curve_id = ? AND month_id = ?', trade.curve_id, trade.month_id).all %>
+        <% price_record.each do |p| %>
+          <% market_price = p.settle %>
+          <%= market_price %>
+        <% end %>
+      </td>
+      <!-- Display the trade's Mark-to-Market value, as described by the formula volume * (price - market_price) -->
+      <td>
+        <% mtm_value = trade.volume * (trade.price - market_price) %>
+        <%= mtm_value %>
+        <% mtm_total += mtm_value %>
+      </td>
       <td><%= trade.tenor_start %></td>
       <td><%= trade.tenor_end %></td>
       <td><%= trade.delivery_location %></td>
@@ -36,7 +52,11 @@
       <td><%= trade.notes %></td> 
     </tr>
   <% end %>                       
-</table>  
+</table>
+
+<div>
+  <h4><%= "Portfolio mark to market value: #{mtm_total}" %></h4>
+</div>  
 
 <h2>Import Trades</h2>
 <%= form_tag import_trades_path, multipart: true do %>

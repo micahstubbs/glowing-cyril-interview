@@ -1,4 +1,6 @@
 class CurvesController < ApplicationController
+
+
   # GET /curves
   # GET /curves.json
   def index
