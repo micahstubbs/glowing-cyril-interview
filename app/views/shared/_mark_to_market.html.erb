@@ -1,0 +1,33 @@
+	
+<%
+  @trade = Trade.find(2)
+  tenor_end = @trade[:tenor_end].upcase().gsub(/[-]/, " ") 
+  @price_nymex = PricesNymex.where(:date, "#{tenor_end}")
+  settle = @price_nymex[:settle]
+  date = @price_nymex[:date]
+  
+
+  #settle = u[:settle]
+  #date = u[:date]
+
+=begin
+  settle = false
+  u.find_each do |v|
+    date = v[:date] 
+    
+    if date.downcase().gsub(/[\s-]/, "") == tenor_end.downcase().gsub(/[\s-]/, "") 
+      settle = u[:settle] 
+    end
+
+
+  end
+=end
+%>
+
+<p>
+   <%= 
+     "The market price at #{date} is #{settle} | tenor_end: #{tenor_end}" 
+     
+   %>
+
+</p>

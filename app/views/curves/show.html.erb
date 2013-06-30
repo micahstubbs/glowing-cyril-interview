@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Market:</b>
+  <%= @curve.market %>
+</p>
+
+<p>
+  <b>Commodity:</b>
+  <%= @curve.commodity %>
+</p>
+
+
+<%= link_to 'Edit', edit_curve_path(@curve) %> |
+<%= link_to 'Back', curves_path %>

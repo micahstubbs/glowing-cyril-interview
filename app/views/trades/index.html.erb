@@ -1,50 +1,45 @@
-<!-- This is all you -->
 <% provide(:title, 'Trades') %>
-<html>
-  <head>
-    <title>Glowing Cyril| <%= yield(:title) %></title>
-  </head>
-  <body>
-    <h1>Glowing Cyril</h1>
-    <p>
-      This is the trades page for the
-      <a href="https://github.com/micahstubbs/glowing-cyril-interview">Glowing Cyril</a>
-      application.
-    </p>
+<h1>Trades</h1>
+<table id="trades">                         
+  <tr>
+    <th></th>                          
+    <th>counterparty</th>
+    <th>trader</th>
+    <th><div title="mtm_curve">price_curve_type<div></th>
+    <th>buy_sell</th>
+    <th>price</th>
+    <th>volume</th>
+    <th>tenor_start</th>
+    <th>tenor_end</th>
+    <th>delivery_location</th>
+    <th>instrument</th>
+    <th>brokerage</th>
+    <th>tags</th>
+    <th>notes</th>
+  </tr>
+    
+  <% @trades.each do |trade| %>       
+    <tr>
+      <td><%= link_to 'Show', trade %></td>
+      <td><%= trade.counterparty %></td> 
+      <td><%= trade.trader %></td>
+      <td><%= trade.mtm_curve %></td>
+      <td><%= trade.buy_sell %></td>
+      <td><%= trade.price %></td>
+      <td><%= trade.volume %></td>
+      <td><%= trade.tenor_start %></td>
+      <td><%= trade.tenor_end %></td>
+      <td><%= trade.delivery_location %></td>
+      <td><%= trade.instrument %></td>
+      <td><%= trade.brokerage %></td>
+      <td><%= trade.tags %></td>
+      <td><%= trade.notes %></td> 
+    </tr>
+  <% end %>                       
+</table>  
 
-    <table>                         
-      <tr>                          
-        <th>counterparty</th>
-        <th>trader</th>
-        <th>mtm_curve</th>
-        <th>buy_sell</th>
-        <th>price</th>
-        <th>volume</th>
-        <th>tenor_start</th>
-        <th>tenor_end</th>
-        <th>delivery_location</th>
-        <th>instrument</th>
-        <th>brokerage</th>
-        <th>tags</th>
-        <th>notes</th>
-      </tr>
-        <% @trades.each do |data| %>       
-          <tr>
-            <td><%= data.counterparty %></td> 
-            <td><%= data.trader %></td>
-            <td><%= data.mtm_curve %></td>
-            <td><%= data.buy_sell %></td>
-            <td><%= data.price %></td>
-            <td><%= data.volume %></td>
-            <td><%= data.tenor_start %></td>
-            <td><%= data.tenor_end %></td>
-            <td><%= data.delivery_location %></td>
-            <td><%= data.instrument %></td>
-            <td><%= data.brokerage %></td>
-            <td><%= data.tags %></td>
-            <td><%= data.notes %></td> 
-          </tr>
-        <% end %>                       
-    </table>  
-  </body>
-</html>
+<h2>Import Trades</h2>
+<%= form_tag import_trades_path, multipart: true do %>
+  <%= file_field_tag :file %>
+  <%= submit_tag "Import" %>
+<% end %>

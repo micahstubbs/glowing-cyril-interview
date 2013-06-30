@@ -1,14 +1,37 @@
 GlowingCyrilInterview::Application.routes.draw do
+  
+
+  
+
+
+
   get "static_pages/home"
 
   get "static_pages/help"
   get "instructions_controller/index"
 
-  resources :trades
+
   match 'trades' => 'trades#index'
 
-  
-  
+  resources :trades do
+    collection { post :import }
+  end
+  match 'trades' => 'trades#index'
+
+  resources :months do
+    collection { post :import }
+  end
+  match 'months' => 'months#index'
+
+  resources :curves do
+    collection { post :import }
+  end
+  match 'curves' => 'curves#index'
+
+  resources :prices do
+    collection { post :import }
+  end
+  match 'prices' => 'prices#index'
   
 
   # The priority is based upon order of creation:

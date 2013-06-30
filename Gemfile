@@ -6,6 +6,7 @@ gem 'jquery-rails'
 gem 'redcarpet'
 gem 'annotate', ">=2.5.0"
 gem 'bootstrap-sass'
+gem "squeel"
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'

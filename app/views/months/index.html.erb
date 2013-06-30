@@ -1,0 +1,34 @@
+<% provide(:title, 'Months') %>
+
+<h1>Months</h1>
+
+<table>
+  <tr>
+    <th>Month</th>
+    <th>ID</th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @months.each do |month| %>
+  <tr>
+    <td><%= month.month_string %></td>
+    <td><%= month.id %></td>
+    <!--  
+    <td><%= link_to 'Show', month %></td>
+    <td><%= link_to 'Edit', edit_month_path(month) %></td>
+    <td><%= link_to 'Destroy', month, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    -->
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Month', new_month_path %>
+
+<h2>Import months</h2>
+<%= form_tag import_months_path, multipart: true do %>
+  <%= file_field_tag :file %>
+  <%= submit_tag "Import" %>
+<% end %>

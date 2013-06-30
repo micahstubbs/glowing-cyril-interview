@@ -1,0 +1,10 @@
+id,counterparty,trader,mtm_curve,curve_id,buy_sell,price,volume,tenor_start,tenor_end,month_id,delivery_location,instrument,brokerage,tags,notes
+1,NYMEX,Sam Parikh,NYMEX CL,3,B,80,30000,apr13,apr13,7,,NYMEX CL Future,OTC Global,#OilHedge #HoustonBook,Financial Future: NYMEX CL
+2,NYMEX,Sam Parikh,NYMEX CL,3,S,85,10000,apr13,apr13,7,,NYMEX CL Future,OTC Global,#OilHedge #HoustonBook,Financial Future: NYMEX CL
+3,NYMEX,Sam Parikh,NYMEX CL,3,B,78,10000,apr13,oct13,13,,NYMEX CL Future,OTC Global,#GreatPrice #OilHedge #HoustonBook,Extra tag
+4,NYMEX,Sam Parikh,NYMEX CL,3,S,89,10000,apr13,oct13,13,,NYMEX CL Future,OTC Global,#OilHedge #HoustonBook,Financial Future: NYMEX CL
+5,BP,Sameer Soleja,ICE WTI,2,B,95,100000,jan13,dec13,15,Houston Hub,OTC Crude Forward,OTC Global,#NaturalNeeds #Physical,Physical Forward
+6,BG,Sameer Soleja,ICE WTI,2,B,97,30000,jan13,dec13,15,Houston Hub,OTC Crude Forward,OTC Global,#NaturalNeeds #Physical,Physical Forward
+7,ExxonMobil,Sameer Soleja,ICE WTI,2,B,100,100000,jan13,dec13,15,Houston Hub,OTC Crude Forward,OTC Global,#NaturalNeeds #Physical,Physical Forward
+8,Chevron,Sameer Soleja,ICE WTI,2,B,95,50000,jan13,dec13,15,Houston Hub,OTC Crude Forward,OTC Global,#NaturalNeeds #Physical,Physical Forward
+9,Bob's Oil,Randy Baker,NYMEX CL,3,S,-0.05,300000,jan13,dec13,15,Bob's Oil,OTC Crude Forward,,#Customer #ProfitProfitProfit,Index Forward (Bilateral)
