@@ -6,9 +6,16 @@ class Trade < ActiveRecord::Base
   has_many :months
   
 
-  alias_attribute :book_price, :price 
+  alias_attribute :book_price, :price
+  alias_attribute 'buy/sell', :buy_sell
+  alias_attribute 'tenor start', :tenor_start
+  alias_attribute 'tenor end', :tenor_end
+  alias_attribute 'delivery location', :delivery_location
+  alias_attribute 'mtm curve', :mtm_curve
+
 
   require 'csv'
+  require 'date'
 
   def self.import(file)
     CSV.foreach(file.path, headers: true) do |row|

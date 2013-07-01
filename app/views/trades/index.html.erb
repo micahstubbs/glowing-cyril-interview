@@ -1,65 +1,122 @@
+<!DOCTYPE html>
 <% provide(:title, 'Trades') %>
-<h1>Trades</h1>
-<table id="trades">                         
-  <tr>
-    <th></th>                          
-    <th>counterparty</th>
-    <th>trader</th>
-    <th><div title="mtm_curve">price_curve_type<div></th>
-    <th>buy_sell</th>
-    <th>price</th>
-    <th>volume</th>
-    <th>market_price</th>
-    <th>mark_to_market_value</th>
-    <th>tenor_start</th>
-    <th>tenor_end</th>
-    <th>delivery_location</th>
-    <th>instrument</th>
-    <th>brokerage</th>
-    <th>tags</th>
-    <th>notes</th>
-  </tr>
-  <% mtm_total = 0 %>  
-  <% @trades.each do |trade| %>       
-    <tr>
-      <td><%= link_to 'Show', trade %></td>
-      <td><%= trade.counterparty %></td> 
-      <td><%= trade.trader %></td>
-      <td><%= trade.mtm_curve %></td>
-      <td><%= trade.buy_sell %></td>
-      <td><%= trade.price %></td>
-      <td><%= trade.volume %></td>
-      <td>
-        <% market_price = 0 %>
-        <% price_record = Price.where('curve_id = ? AND month_id = ?', trade.curve_id, trade.month_id).all %>
-        <% price_record.each do |p| %>
-          <% market_price = p.settle %>
-          <%= market_price %>
-        <% end %>
-      </td>
-      <!-- Display the trade's Mark-to-Market value, as described by the formula volume * (price - market_price) -->
-      <td>
-        <% mtm_value = trade.volume * (trade.price - market_price) %>
-        <%= mtm_value %>
-        <% mtm_total += mtm_value %>
-      </td>
-      <td><%= trade.tenor_start %></td>
-      <td><%= trade.tenor_end %></td>
-      <td><%= trade.delivery_location %></td>
-      <td><%= trade.instrument %></td>
-      <td><%= trade.brokerage %></td>
-      <td><%= trade.tags %></td>
-      <td><%= trade.notes %></td> 
-    </tr>
-  <% end %>                       
-</table>
 
-<div>
-  <h4><%= "Portfolio mark to market value: #{mtm_total}" %></h4>
+
+<div class="container">
+  
+
+  <div class="row-fluid">
+    <div class="span4"><p class="text-left"><h1>Trades</h1></p></div>
+    <div class="span8"><p class="text-right"></p></div>
+  </div>
+
+  <% mtm_total = 0 %>  
+  <% buy_sell = '' %>
+
+  <div class="row-fluid">
+    <div class="span12"><p class="text-left"></p></div>
+  </div>
+
+  <% @trades.each do |trade| %>
+
+    <%
+=begin
+
+This sets default values for a trade record if it is nil, an effort to resolve this error raised when running the cucumber test 'display_trades.feature':
+
+undefined method `gsub' for nil:NilClass (ActionView::Template::Error)            
+        
+=end
+
+      trade = [ counterparty: '', month_id: 0, curve_id: 0, trader: '', mtm_curve: '', buy_sell: '', price: 0, volume: 0, tenor_start: 'jan13', tenor_end: 'jan13' , delivery_location: '', instrument: '', brokerage: '', tags: '', notes: ''] if nil?
+
+      buy_sell = trade.buy_sell
+      price = trade.price
+      tenor_start = trade.tenor_start.gsub(/<(?!\/?(?=>|\s*>)) 
+\/?.*?>/, "").gsub("\r","")
+      tenor_end = trade.tenor_end.gsub(/<(?!\/?(?=>|\s*>)) 
+\/?.*?>/, "").gsub("\r","")
+      volume = trade.volume 
+    %>
+
+    <% if buy_sell == 'S' then buy_sell = 'Sold' end %>
+    <% if buy_sell == 'B' then buy_sell = 'Bought' end %> 
+    <% price = number_to_currency(price) %>
+    <% tenor_start = DateTime.parse("01#{tenor_start.gsub(/[-]/,'')}").strftime('%B %Y') %>
+    <% tenor_end = DateTime.parse("01#{trade.tenor_end.gsub(/[-]/,'')}").strftime('%B %Y') %>
+
+    <% volume = number_with_delimiter('%.0f' % volume) %>
+
+
+    <% market_price = 0 %>
+    <% price_record = Price.where('curve_id = ? AND month_id = ?', trade.curve_id, trade.month_id).all %>
+    <% price_record.each do |p| %>
+      <% market_price = p.settle %>
+    <% end %>
+
+    <% 
+      if trade.buy_sell == 'S' 
+        mtm_value = trade.volume * (trade.price - market_price)
+      else
+        mtm_value = trade.volume * (market_price - trade.price)
+      end
+    %>
+    <% mtm_total += mtm_value %>
+
+
+    <div id="trade">
+      <div class="trade_box">  
+        <div class="row-fluid">
+          <div class="span9"><p class="text-left"><%= "#{buy_sell} #{volume} bbls #{trade.mtm_curve} #{trade.  delivery_location} at #{price}" %></p></div>
+          <div class="span3"><p class="text-right"><%= "market price #{market_price}" %></p></div> 
+        </div>
+      
+        <div class="row-fluid">
+         <div class="span6"><p class="text-left"><%= "#{tenor_start} - #{tenor_end}" %></p></div>
+    
+         <div class="span6"><p class="text-right"><%= "mark-to-market value #{mtm_value}" %></p></div> 
+        </div>
+              
+        <div class="row-fluid">
+          <div class="span9"><p class="text-left"><%= %></p></div>
+          <div class="span3"><p class="text-center"></p></div>
+        </div>
+  
+        <div class="row-fluid">
+          <div class="span9"><p class="text-left"><%= "#{trade.trader} entered this #{trade.instrument} trade   with counterparty #{trade.counterparty}. #{trade.notes}, used brokerage #{trade.brokerage}, price curve from #{trade.mtm_curve}" %></p></div>
+          <div class="span3"><p class="text-right"><%= "#{trade.tags}" %></p></div>
+        </div>
+  
+        <div class="row-fluid">
+          
+        </div>
+
+      </div>
+  
+        <div class="row-fluid">
+          <div class="span12"><p class="text-left"></p></div>
+        </div>
+      
+
+    </div>
+  <% end %>
+
+
+<div class="row-fluid">
+  <div class="span7"></div>
+  <div class="span5">
+    <h4><%= "Portfolio MTM Value: #{mtm_total}" %></h4>
+  </div>
 </div>  
 
+<!--
 <h2>Import Trades</h2>
-<%= form_tag import_trades_path, multipart: true do %>
-  <%= file_field_tag :file %>
-  <%= submit_tag "Import" %>
+-->
+<% form_tag import_trades_path, multipart: true do %>
+  <% file_field_tag :file %>
+  <% submit_tag "Import" %>
 <% end %>
+
+</div>
+
+<p class="test_keywords">Buy buy Sell sell MTM Value</p>

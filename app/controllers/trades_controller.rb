@@ -25,6 +25,6 @@ class TradesController < ApplicationController
   def catch_not_found
     yield
   rescue ActiveRecord::RecordNotFound
-    redirect_to trades_path, :flash => { :error => "Record not found." }
+    redirect_to root_url, :flash => { :error => "Record not found." }
   end
 end
