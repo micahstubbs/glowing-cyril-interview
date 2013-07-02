@@ -3,14 +3,42 @@
 
 
 <div class="container">
-  
-
-  <div class="row-fluid">
-    <div class="span4"><p class="text-left"><h1>Trades</h1></p></div>
-    <div class="span8"><p class="text-right"></p></div>
-  </div>
 
   <% mtm_total = 0 %>  
+  <% buy_sell = '' %>
+  <% market_price = 0 %>
+
+  <% @trades.each do |trade| %>
+  
+    <% price_record = Price.where('curve_id = ? AND month_id = ?', trade.  curve_id, trade.month_id).all %>
+    <% price_record.each do |p| %>
+        <% market_price = p.settle %>
+      <% end %>
+  
+      <% 
+        if trade.buy_sell == 'S' 
+          mtm_value = trade.volume * (trade.price - market_price)
+        else
+          mtm_value = trade.volume * (market_price - trade.price)
+        end
+      %>  
+  
+      <% mtm_total += mtm_value %>
+  
+  <% end %>
+
+  <% mtm_value = number_to_currency(mtm_value, negative_format: "(%u%n)") %>
+  <% mtm_total = number_to_currency(mtm_total, negative_format: "(%u%n)") %>
+
+
+
+  <div class="row-fluid">
+    <div class="span4"><p class="text-left"><h2>Trades</h2></p></div>
+    <div class="span8"><p class="text-right"><h3><%= "Portfolio MTM Value: #{mtm_total}" %></h3></p></div>
+  </div>
+
+  <% mtm_total = 0 %>
+  <% mtm_value = 0 %>  
   <% buy_sell = '' %>
 
   <div class="row-fluid">
@@ -39,9 +67,9 @@ undefined method `gsub' for nil:NilClass (ActionView::Template::Error)
       volume = trade.volume 
     %>
 
-    <% if buy_sell == 'S' then buy_sell = 'Sold' end %>
-    <% if buy_sell == 'B' then buy_sell = 'Bought' end %> 
-    <% price = number_to_currency(price) %>
+    <% if buy_sell == 'S' then buy_sell = 'Sell' end %>
+    <% if buy_sell == 'B' then buy_sell = 'Buy' end %> 
+    <% price = number_to_currency(price, negative_format: "(%u%n)") %>
     <% tenor_start = DateTime.parse("01#{tenor_start.gsub(/[-]/,'')}").strftime('%B %Y') %>
     <% tenor_end = DateTime.parse("01#{trade.tenor_end.gsub(/[-]/,'')}").strftime('%B %Y') %>
 
@@ -54,6 +82,7 @@ undefined method `gsub' for nil:NilClass (ActionView::Template::Error)
       <% market_price = p.settle %>
     <% end %>
 
+
     <% 
       if trade.buy_sell == 'S' 
         mtm_value = trade.volume * (trade.price - market_price)
@@ -63,18 +92,28 @@ undefined method `gsub' for nil:NilClass (ActionView::Template::Error)
     %>
     <% mtm_total += mtm_value %>
 
+    <% mtm_value = number_to_currency(mtm_value, negative_format: "(%u%n)") %>
+    <% market_price = number_to_currency(market_price, negative_format: "(%u%n)") %>
+
+
+
 
     <div id="trade">
-      <div class="trade_box">  
+      <div class="trade_box">
+        
         <div class="row-fluid">
-          <div class="span9"><p class="text-left"><%= "#{buy_sell} #{volume} bbls #{trade.mtm_curve} #{trade.  delivery_location} at #{price}" %></p></div>
-          <div class="span3"><p class="text-right"><%= "market price #{market_price}" %></p></div> 
+          <div class="span12"><p class="text-left"></p></div>
+        </div>
+
+        <div class="row-fluid">
+          <div class="span7"><h5 class="text-left"><%= "#{buy_sell} #{volume} bbls #{trade.mtm_curve} #{trade.  delivery_location} at #{price}" %></h5></div>
+          <div class="span5"><h5 class="text-right"><%= "mark-to-market value #{mtm_value}" %></h5></div> 
         </div>
       
         <div class="row-fluid">
          <div class="span6"><p class="text-left"><%= "#{tenor_start} - #{tenor_end}" %></p></div>
     
-         <div class="span6"><p class="text-right"><%= "mark-to-market value #{mtm_value}" %></p></div> 
+         <div class="span6"><p class="text-right"><%= "market price #{market_price}" %></p></div> 
         </div>
               
         <div class="row-fluid">
@@ -83,13 +122,10 @@ undefined method `gsub' for nil:NilClass (ActionView::Template::Error)
         </div>
   
         <div class="row-fluid">
-          <div class="span9"><p class="text-left"><%= "#{trade.trader} entered this #{trade.instrument} trade   with counterparty #{trade.counterparty}. #{trade.notes}, used brokerage #{trade.brokerage}, price curve from #{trade.mtm_curve}" %></p></div>
-          <div class="span3"><p class="text-right"><%= "#{trade.tags}" %></p></div>
+          <div class="span8"><p class="text-left"><%= "#{trade.trader} entered this #{trade.instrument} trade   with counterparty #{trade.counterparty}. #{trade.notes}, used brokerage #{trade.brokerage}, price curve is #{trade.mtm_curve}" %></p></div>
+          <div class="span4"><p class="text-right"><%= "#{trade.tags}" %></p></div>
         </div>
   
-        <div class="row-fluid">
-          
-        </div>
 
       </div>
   
@@ -100,14 +136,6 @@ undefined method `gsub' for nil:NilClass (ActionView::Template::Error)
 
     </div>
   <% end %>
-
-
-<div class="row-fluid">
-  <div class="span7"></div>
-  <div class="span5">
-    <h4><%= "Portfolio MTM Value: #{mtm_total}" %></h4>
-  </div>
-</div>  
 
 <!--
 <h2>Import Trades</h2>

@@ -1,11 +1,13 @@
 GlowingCyrilInterview::Application.routes.draw do
 
+  root :to => "trades#index"
+
   get "static_pages/home"
 
   get "static_pages/help"
   get "instructions_controller/index"
 
-
+  match 'about' => 'instructions#index'
   match 'trades' => 'trades#index'
 
   resources :trades do
